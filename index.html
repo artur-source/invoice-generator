@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Invoice Generator - Telma S A Santos</title>
+    <style>
+        /* Global Styles & Variables */
+        :root {
+            --primary-blue: #2563eb;
+            --dark-blue: #1e40af;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --bg-gray: #f9fafb;
+            --border-color: #e5e7eb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-print-color-adjust: exact;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Control Panel (Hidden on Print) */
+        .control-panel {
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .exchange-rate-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #eff6ff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #bfdbfe;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .exchange-rate-box input {
+            width: 60px;
+            border: none;
+            background: transparent;
+            color: var(--dark-blue);
+            font-weight: 800;
+            outline: none;
+            text-align: center;
+            border-bottom: 1px solid #bfdbfe;
+        }
+
+        .btn {
+            cursor: pointer;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--text-main);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: #000;
+        }
+
+        .btn-outline {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        /* Invoice Card */
+        .invoice-card {
+            background: var(--white);
+            padding: 3.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-height: 1050px;
+        }
+
+        /* Header */
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .invoice-title h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.025em;
+            color: var(--text-main);
+        }
+
+        .invoice-meta {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .invoice-meta span {
+            color: var(--text-main);
+            margin-left: 0.5rem;
+        }
+
+        .brand-info {
+            text-align: right;
+        }
+
+        .brand-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .brand-tagline {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: 0.25rem;
+        }
+
+        /* Address Sections */
+        .address-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .address-section h3 {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #d1d5db;
+            margin-bottom: 1rem;
+        }
+
+        .address-content {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .address-content p.name {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-info {
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .email {
+            font-style: italic;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .phone {
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }
+
+        /* Items Table */
+        .items-table-container {
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: var(--text-main);
+            color: var(--white);
+        }
+
+        th {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        td {
+            padding: 1.5rem;
+            vertical-align: top;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .item-desc-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .item-desc-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .price-cell {
+            font-weight: 800;
+            font-size: 1.125rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .currency-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .currency-symbol {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-right: 0.2rem;
+            text-transform: uppercase;
+        }
+
+        .usd-converted {
+            font-size: 0.75rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+
+        /* Totals & Payment */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 3rem;
+        }
+
+        .payment-info {
+            background-color: var(--bg-gray);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .payment-info h3 {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .payment-details {
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 0.5rem;
+        }
+
+        .payment-row:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .label-small {
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.6rem;
+        }
+
+        .value-small {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .totals-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .subtotal-box {
+            background-color: var(--bg-gray);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .subtotal-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtotal-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .total-box {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .total-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.75rem;
+        }
+
+        .total-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .total-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.8;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .total-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+        }
+
+        .total-currency {
+            font-size: 0.75rem;
+            font-weight: 400;
+            font-style: italic;
+            opacity: 0.7;
+        }
+
+        /* Final Footer */
+        .invoice-footer {
+            margin-top: 4rem;
+            text-align: center;
+            border-top: 1px solid #f3f4f6;
+            padding-top: 2rem;
+        }
+
+        .thanks-msg {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #d1d5db;
+        }
+
+        /* Editable Styles */
+        [contenteditable="true"] {
+            outline: none;
+            border-radius: 0.25rem;
+            transition: background 0.2s;
+            padding: 0 2px;
+        }
+
+        [contenteditable="true"]:hover {
+            background-color: #eff6ff;
+            box-shadow: 0 0 0 1px #bfdbfe;
+        }
+
+        [contenteditable="true"]:focus {
+            background-color: #fff;
+            box-shadow: 0 0 0 2px var(--primary-blue);
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background-color: white; }
+            .container { margin: 0; max-width: none; padding: 0; }
+            .control-panel { display: none; }
+            .invoice-card { box-shadow: none; padding: 0; margin: 0; }
+            [contenteditable="true"]:hover { background: none; box-shadow: none; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .invoice-card { padding: 1.5rem; }
+            .address-grid, .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .brand-info { text-align: left; margin-top: 1rem; }
+            .invoice-header { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Control Panel -->
+        <div class="control-panel no-print">
+            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                <button id="toggleEdit" class="btn btn-outline" onclick="toggleEditMode()">
+                    LOCK EDITING
+                </button>
+                <div class="exchange-rate-box">
+                    <span>USD EXCHANGE RATE: R$</span>
+                    <input type="text" id="exchangeRate" value="5.00" oninput="updateCalculations()">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="window.print()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                PRINT / SAVE AS PDF
+            </button>
+        </div>
+
+        <!-- Invoice -->
+        <div class="invoice-card" id="invoice">
+            <!-- Header -->
+            <header class="invoice-header">
+                <div class="invoice-title">
+                    <h1>Invoice</h1>
+                    <div class="invoice-meta">
+                        <p>Number: <span contenteditable="true">39</span></p>
+                        <p>Date: <span contenteditable="true" id="currentDate">17/02/2025</span></p>
+                    </div>
+                </div>
+                <div class="brand-info">
+                    <div class="brand-name" contenteditable="true">Telma de S A Santos</div>
+                    <div class="brand-tagline" contenteditable="true">Serviços e Entregas Rápidas</div>
+                </div>
+            </header>
+
+            <!-- Addresses -->
+            <div class="address-grid">
+                <div class="address-section">
+                    <h3>From</h3>
+                    <div class="address-content">
+                        <p class="name" contenteditable="true">Telma de S A Santos</p>
+                        <p contenteditable="true">Rua do Seminário, 199, 5º Andar</p>
+                        <p contenteditable="true">cj 52, sala 4 – São Paulo, SP</p>
+                        <p contenteditable="true">CEP 01034-904 – Brazil</p>
+                        <div class="contact-info">
+                            <p class="email" contenteditable="true">telminha7@outlook.com</p>
+                            <p class="phone" contenteditable="true">+55 11 4645-1738</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="address-section" style="text-align: right;">
+                    <h3>Bill To</h3>
+                    <div class="address-content">
+                        <p class="name" contenteditable="true">Odfjell Management AS</p>
+                        <p contenteditable="true">P.O. Box 6101 Postterminalen</p>
+                        <p contenteditable="true">N-5862 Bergen – Norway</p>
+                        <div class="contact-info" style="margin-top: 1.5rem;">
+                            <p class="label-small">Purchase Order: <span contenteditable="true" style="color: var(--text-main); margin-left: 0.5rem;">#28496</span></p>
+                            <p class="phone" contenteditable="true">Phone: +47 55 27 00 00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items Table -->
+            <div class="items-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70%;">Service Description</th>
+                            <th style="text-align: right;">Amount (BRL)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="item-desc-title" contenteditable="true">Transport Service – Bow Oceanic</div>
+                                <div class="item-desc-sub" contenteditable="true">International logistics and fast delivery services.</div>
+                            </td>
+                            <td class="text-right">
+                                <div class="price-cell">
+                                    <div class="currency-row">
+                                        <span class="currency-symbol">R$</span>
+                                        <span contenteditable="true" class="calc-trigger" id="subtotalVal">2,880.22</span>
+                                    </div>
+                                    <div class="usd-converted">
+                                        ≈ $ <span id="usdRowVal">576.04</span> USD
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer Grid -->
+            <div class="footer-grid">
+                <!-- Payment Instructions -->
+                <div class="payment-info">
+                    <h3>Payment Instructions</h3>
+                    <div class="payment-details">
+                        <div class="payment-row" style="flex-direction: column; border: none;">
+                            <span class="label-small">Beneficiary</span>
+                            <span class="value-small" contenteditable="true">Telma S A Santos Serviço de Entregas Rápidas ME</span>
+                        </div>
+                        <div class="payment-row">
+                            <span class="label-small">Registered Number (CNPJ):</span>
+                            <span class="value-small" contenteditable="true">23.640.319/0001-87</span>
+                        </div>
+                        <div class="payment-row">
+                            <span class="label-small">Bank:</span>
+                            <span class="value-small" contenteditable="true">Santander (033)</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid #e5e7eb; padding-top: 0.5rem;">
+                            <div style="display: flex; flex-direction: column;">
+                                <span class="label-small">Agency</span>
+                                <span class="value-small" contenteditable="true">0350</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; text-align: right;">
+                                <span class="label-small">Account</span>
+                                <span class="value-small" contenteditable="true">13003076-4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Totals -->
+                <div class="totals-section">
+                    <div class="subtotal-box">
+                        <div class="subtotal-row">
+                            <span>Subtotal</span>
+                            <span>R$ <span id="displaySubtotal">2,880.22</span></span>
+                        </div>
+                        <div class="subtotal-row">
+                            <span>Tax (<span contenteditable="true" class="calc-trigger" id="taxRate">0</span>%)</span>
+                            <span>R$ <span id="displayTax">0.00</span></span>
+                        </div>
+                    </div>
+                    <div class="total-box">
+                        <div class="total-item">
+                            <span class="total-label">Total in BRL</span>
+                            <div class="total-value">
+                                <span class="total-currency">R$</span>
+                                <span id="finalTotalBRL">2,880.22</span>
+                            </div>
+                        </div>
+                        <div class="total-item">
+                            <span class="total-label">Converted to USD</span>
+                            <div class="total-value" style="font-size: 1.25rem; opacity: 0.9;">
+                                <span class="total-currency">$</span>
+                                <span id="finalTotalUSD">576.04</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Message -->
+            <footer class="invoice-footer">
+                <p class="thanks-msg" contenteditable="true">Thank you for your business. Payment is due within 15 days.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Utility Functions
+        function parseValue(text) {
+            if (!text) return 0;
+            // Handle both comma and dot as decimal separators
+            let clean = text.toString().replace(/\s/g, '').replace(/,/g, '');
+            return parseFloat(clean) || 0;
+        }
+
+        function formatBRL(num) {
+            return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatUSD(num) {
+            return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Calculation Logic
+        function updateCalculations() {
+            const subtotal = parseValue(document.getElementById('subtotalVal').innerText);
+            const taxRate = parseValue(document.getElementById('taxRate').innerText);
+            const exchangeRate = parseValue(document.getElementById('exchangeRate').value) || 1;
+
+            const taxAmount = (subtotal * taxRate) / 100;
+            const totalBRL = subtotal + taxAmount;
+            const totalUSD = totalBRL / exchangeRate;
+
+            // Update displays
+            document.getElementById('displaySubtotal').innerText = formatBRL(subtotal);
+            document.getElementById('displayTax').innerText = formatBRL(taxAmount);
+            document.getElementById('finalTotalBRL').innerText = formatBRL(totalBRL);
+            document.getElementById('finalTotalUSD').innerText = formatUSD(totalUSD);
+            document.getElementById('usdRowVal').innerText = formatUSD(subtotal / exchangeRate);
+        }
+
+        // Editing Mode
+        function toggleEditMode() {
+            const btn = document.getElementById('toggleEdit');
+            const editables = document.querySelectorAll('[contenteditable]');
+            const isEditing = editables[0].contentEditable === "true";
+
+            editables.forEach(el => {
+                el.contentEditable = !isEditing;
+            });
+
+            if (isEditing) {
+                btn.innerText = "ENABLE EDITING";
+                btn.classList.remove('btn-outline');
+                btn.style.backgroundColor = '#eff6ff';
+                btn.style.color = '#2563eb';
+                btn.style.border = '1px solid #bfdbfe';
+            } else {
+                btn.innerText = "LOCK EDITING";
+                btn.classList.add('btn-outline');
+                btn.style = ''; 
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('calc-trigger')) {
+                updateCalculations();
+            }
+        });
+
+        // Prevent line breaks in numeric fields
+        document.querySelectorAll('.calc-trigger').forEach(el => {
+            el.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.blur();
+                }
+            });
+        });
+
+        // Initialization
+        window.onload = function() {
+            updateCalculations();
+        };
+    </script>
+</body>
+</html>
