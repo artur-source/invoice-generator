@@ -446,12 +446,53 @@
         }
 
         /* Print Styles */
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+
         @media print {
-            body { background-color: white; }
-            .container { margin: 0; max-width: none; padding: 0; }
+            html, body {
+                height: 100%;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden;
+            }
+            body { 
+                background-color: white; 
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 12px; /* Slightly smaller font for print */
+            }
+            .container { 
+                margin: 0; 
+                max-width: none; 
+                padding: 0; 
+                width: 100%;
+            }
             .control-panel { display: none; }
-            .invoice-card { box-shadow: none; padding: 0; margin: 0; }
+            .invoice-card { 
+                box-shadow: none; 
+                padding: 0; 
+                margin: 0; 
+                min-height: auto !important;
+                width: 100%;
+            }
+            
+            /* Adjust spacing for print */
+            .invoice-header { margin-bottom: 1rem; padding-bottom: 1rem; }
+            .address-grid { margin-bottom: 1.5rem; gap: 1.5rem; }
+            .items-table-container { margin-bottom: 1.5rem; }
+            td { padding: 1rem; }
+            .footer-grid { gap: 1.5rem; }
+            .total-box { padding: 1rem; }
+
             [contenteditable="true"]:hover { background: none; box-shadow: none; }
+            
+            /* Ensure no page breaks inside key sections */
+            .invoice-header, .address-grid, .items-table-container, .footer-grid {
+                page-break-inside: avoid;
+            }
         }
 
         /* Responsive */
