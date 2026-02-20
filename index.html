@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Invoice Generator - Telma S A Santos</title>
+    <title>Professional Invoice Generator</title>
     <style>
         /* Global Styles & Variables */
         :root {
@@ -531,13 +531,13 @@
                 <div class="invoice-title">
                     <h1>Invoice</h1>
                     <div class="invoice-meta">
-                        <p>Number: <span contenteditable="true">39</span></p>
-                        <p>Date: <span contenteditable="true" id="currentDate">17/02/2025</span></p>
+                        <p>Number: <span contenteditable="true">INV-000</span></p>
+                        <p>Date: <span contenteditable="true" id="currentDate">DD/MM/YYYY</span></p>
                     </div>
                 </div>
                 <div class="brand-info">
-                    <div class="brand-name" contenteditable="true">Telma de S A Santos</div>
-                    <div class="brand-tagline" contenteditable="true">Serviços e Entregas Rápidas</div>
+                    <div class="brand-name" contenteditable="true">Your Company Name</div>
+                    <div class="brand-tagline" contenteditable="true">Your Service Tagline</div>
                 </div>
             </header>
 
@@ -546,25 +546,25 @@
                 <div class="address-section">
                     <h3>From</h3>
                     <div class="address-content">
-                        <p class="name" contenteditable="true">Telma de S A Santos</p>
-                        <p contenteditable="true">Rua do Seminário, 199, 5º Andar</p>
-                        <p contenteditable="true">cj 52, sala 4 – São Paulo, SP</p>
-                        <p contenteditable="true">CEP 01034-904 – Brazil</p>
+                        <p class="name" contenteditable="true">Your Legal Name / Company</p>
+                        <p contenteditable="true">Your Address Line 1</p>
+                        <p contenteditable="true">Your Address Line 2</p>
+                        <p contenteditable="true">City, State, ZIP - Country</p>
                         <div class="contact-info">
-                            <p class="email" contenteditable="true">telminha7@outlook.com</p>
-                            <p class="phone" contenteditable="true">+55 11 4645-1738</p>
+                            <p class="email" contenteditable="true">your-email@example.com</p>
+                            <p class="phone" contenteditable="true">+00 00 0000-0000</p>
                         </div>
                     </div>
                 </div>
                 <div class="address-section" style="text-align: right;">
                     <h3>Bill To</h3>
                     <div class="address-content">
-                        <p class="name" contenteditable="true">Odfjell Management AS</p>
-                        <p contenteditable="true">P.O. Box 6101 Postterminalen</p>
-                        <p contenteditable="true">N-5862 Bergen – Norway</p>
+                        <p class="name" contenteditable="true">Client Name</p>
+                        <p contenteditable="true">Client Address Line 1</p>
+                        <p contenteditable="true">Client Address Line 2</p>
                         <div class="contact-info" style="margin-top: 1.5rem;">
-                            <p class="label-small">Purchase Order: <span contenteditable="true" style="color: var(--text-main); margin-left: 0.5rem;">#28496</span></p>
-                            <p class="phone" contenteditable="true">Phone: +47 55 27 00 00</p>
+                            <p class="label-small">Purchase Order: <span contenteditable="true" style="color: var(--text-main); margin-left: 0.5rem;">#PO-0000</span></p>
+                            <p class="phone" contenteditable="true">Phone: +00 00 0000 0000</p>
                         </div>
                     </div>
                 </div>
@@ -582,17 +582,17 @@
                     <tbody>
                         <tr>
                             <td>
-                                <div class="item-desc-title" contenteditable="true">Transport Service – Bow Oceanic</div>
-                                <div class="item-desc-sub" contenteditable="true">International logistics and fast delivery services.</div>
+                                <div class="item-desc-title" contenteditable="true">Service Description</div>
+                                <div class="item-desc-sub" contenteditable="true">Add a short description of the delivered service.</div>
                             </td>
                             <td class="text-right">
                                 <div class="price-cell">
                                     <div class="currency-row">
                                         <span class="currency-symbol">R$</span>
-                                        <span contenteditable="true" class="calc-trigger" id="subtotalVal">2,880.22</span>
+                                        <span contenteditable="true" class="calc-trigger" id="subtotalVal">0.00</span>
                                     </div>
                                     <div class="usd-converted">
-                                        ≈ $ <span id="usdRowVal">576.04</span> USD
+                                        ≈ $ <span id="usdRowVal">0.00</span> USD
                                     </div>
                                 </div>
                             </td>
@@ -609,24 +609,24 @@
                     <div class="payment-details">
                         <div class="payment-row" style="flex-direction: column; border: none;">
                             <span class="label-small">Beneficiary</span>
-                            <span class="value-small" contenteditable="true">Telma S A Santos Serviço de Entregas Rápidas ME</span>
+                            <span class="value-small" contenteditable="true">Beneficiary Name</span>
                         </div>
                         <div class="payment-row">
                             <span class="label-small">Registered Number (CNPJ):</span>
-                            <span class="value-small" contenteditable="true">23.640.319/0001-87</span>
+                            <span class="value-small" contenteditable="true">00.000.000/0000-00</span>
                         </div>
                         <div class="payment-row">
                             <span class="label-small">Bank:</span>
-                            <span class="value-small" contenteditable="true">Santander (033)</span>
+                            <span class="value-small" contenteditable="true">Bank Name (000)</span>
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid #e5e7eb; padding-top: 0.5rem;">
                             <div style="display: flex; flex-direction: column;">
                                 <span class="label-small">Agency</span>
-                                <span class="value-small" contenteditable="true">0350</span>
+                                <span class="value-small" contenteditable="true">0000</span>
                             </div>
                             <div style="display: flex; flex-direction: column; text-align: right;">
                                 <span class="label-small">Account</span>
-                                <span class="value-small" contenteditable="true">13003076-4</span>
+                                <span class="value-small" contenteditable="true">00000000-0</span>
                             </div>
                         </div>
                     </div>
@@ -637,7 +637,7 @@
                     <div class="subtotal-box">
                         <div class="subtotal-row">
                             <span>Subtotal</span>
-                            <span>R$ <span id="displaySubtotal">2,880.22</span></span>
+                            <span>R$ <span id="displaySubtotal">0.00</span></span>
                         </div>
                         <div class="subtotal-row">
                             <span>Tax (<span contenteditable="true" class="calc-trigger" id="taxRate">0</span>%)</span>
@@ -649,14 +649,14 @@
                             <span class="total-label">Total in BRL</span>
                             <div class="total-value">
                                 <span class="total-currency">R$</span>
-                                <span id="finalTotalBRL">2,880.22</span>
+                                <span id="finalTotalBRL">0.00</span>
                             </div>
                         </div>
                         <div class="total-item">
                             <span class="total-label">Converted to USD</span>
                             <div class="total-value" style="font-size: 1.25rem; opacity: 0.9;">
                                 <span class="total-currency">$</span>
-                                <span id="finalTotalUSD">576.04</span>
+                                <span id="finalTotalUSD">0.00</span>
                             </div>
                         </div>
                     </div>
